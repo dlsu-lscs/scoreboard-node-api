@@ -14,6 +14,27 @@ export async function getScoreByMemberId(member_id) {
   return scores[0] || null;
 }
 
+export async function bulkTallyScores(scoreData) {
+  const db = await getDB();
+
+  if (!scoreData || scoreData.length === 0) {
+    return { affectedRows: 0 };
+  }
+
+  const query = `
+    INSERT INTO scores (member_id, score) 
+    VALUES ? 
+    ON DUPLICATE KEY UPDATE score = scores.score + VALUES(score)
+  `;
+
+  try {
+    const [result] = await db.query(query, [scoreData]);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
 export async function createScore(data) {
   const db = await getDB();
 
