@@ -1,4 +1,5 @@
 import * as ScoresService from "../services/scores.services.js";
+import * as XLSX from "xlsx";
 
 export async function getScores(req, res) {
   try {
@@ -24,32 +25,58 @@ export async function getScoreByMemberId(req, res) {
   }
 }
 
-export async function uploadScoreCsv(req, res) {
+export async function uploadScoreFile(req, res) {
   try {
     if (!req.file || !req.file.buffer) {
-      return res.status(400).json({ message: "No CSV file uploaded." });
+      return res.status(400).json({ message: "No file uploaded." });
     }
 
     const pointsToAdd = req.body.points ? parseInt(req.body.points) : 1;
-
-    const fileContent = req.file.buffer.toString("utf-8");
-    const lines = fileContent.split(/\r?\n/); // Split by new line
-
     const entriesToProcess = [];
 
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (!line) continue; // Skip empty lines
+    const isExcel =
+      req.file.originalname.match(/\.(xlsx|xls)$/) ||
+      req.file.mimetype ===
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-      const columns = line.split(",");
+    if (isExcel) {
+      const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
+      const sheetName = workbook.SheetNames[0]; // Get first sheet
+      const worksheet = workbook.Sheets[sheetName];
 
-      const rawId = columns[2];
+      const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-      if (rawId) {
-        const memberId = rawId.replace(/['"]+/g, "").trim();
+      for (let i = 1; i < data.length; i++) {
+        const row = data[i];
+        if (!row || row.length === 0) continue;
 
-        if (/^\d+$/.test(memberId)) {
-          entriesToProcess.push([parseInt(memberId), pointsToAdd]);
+        const rawId = row[2];
+
+        if (rawId) {
+          const memberId = String(rawId).replace(/['"]+/g, "").trim();
+
+          if (/^\d+$/.test(memberId)) {
+            entriesToProcess.push([parseInt(memberId), pointsToAdd]);
+          }
+        }
+      }
+    } else {
+      const fileContent = req.file.buffer.toString("utf-8");
+      const lines = fileContent.split(/\r?\n/);
+
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        const columns = line.split(",");
+        const rawId = columns[2];
+
+        if (rawId) {
+          const memberId = rawId.replace(/['"]+/g, "").trim();
+
+          if (/^\d+$/.test(memberId)) {
+            entriesToProcess.push([parseInt(memberId), pointsToAdd]);
+          }
         }
       }
     }
@@ -57,7 +84,7 @@ export async function uploadScoreCsv(req, res) {
     if (entriesToProcess.length === 0) {
       return res
         .status(400)
-        .json({ message: "No valid member IDs found in CSV." });
+        .json({ message: "No valid member IDs found in file." });
     }
 
     const result = await ScoresService.bulkTallyScores(entriesToProcess);
@@ -68,7 +95,7 @@ export async function uploadScoreCsv(req, res) {
       affected_rows: result.affectedRows,
     });
   } catch (error) {
-    console.error("CSV Upload Error:", error);
+    console.error("File Upload Error:", error);
     res.status(500).json({ error: error.message });
   }
 }
