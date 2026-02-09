@@ -10,6 +10,15 @@ export async function getScores(req, res) {
   }
 }
 
+export async function getTop10(req, res) {
+  try {
+    const scores = await ScoresService.getScores();
+    res.status(200).json(scores);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 export async function getScoreByMemberId(req, res) {
   try {
     const member_id = req.params.id;

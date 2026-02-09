@@ -14,6 +14,7 @@ router.put("/:id", ScoresController.updateScore);
 router.post("/upload", upload.single("file"), ScoresController.uploadScoreFile);
 
 router.get("/:id", ScoresController.getScoreByMemberId);
+router.get("/top", ScoresController.getTop10);
 router.get("/", ScoresController.getScores);
 router.post("/", ScoresController.createScore);
 

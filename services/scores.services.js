@@ -14,6 +14,12 @@ export async function getScoreByMemberId(member_id) {
   return scores[0] || null;
 }
 
+export async function getTop10() {
+  const db = await getDB();
+  const [scores] = await db.query("SELECT * FROM scores ORDER BY score DESC LIMIT 10")
+  return scores;
+}
+
 export async function bulkTallyScores(scoreData) {
   const db = await getDB();
 
