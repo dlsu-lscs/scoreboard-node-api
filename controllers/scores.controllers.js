@@ -1,4 +1,4 @@
-import * as ScoresService from "../services/scores.service.js";
+import * as ScoresService from "../services/scores.services.js";
 
 export async function getScores(req, res) {
   try {

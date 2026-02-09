@@ -1,6 +1,6 @@
 import express, { urlencoded, json } from "express";
 import { initDB, closeDB } from "./config/connect.js";
-import { scoresRouter } from "../routes/scores.routes.js";
+import scoresRouter from "./routes/scores.routes.js";
 import "dotenv/config";
 
 const app = express();
