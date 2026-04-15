@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "mode": "yolo",
+  "granularity": "standard",
+  "parallelization": true,
+  "commit_docs": true,
+  "model_profile": "balanced",
+  "project": {
+    "name": "LSCS Scoreboard API",
+    "type": "brownfield",
+    "initialized": "2025-04-15"
+  },
+  "workflow": {
+    "research": true,
+    "plan_check": true,
+    "verifier": true,
+    "nyquist_validation": true,
+    "auto_advance": false
+  },
+  "standards": {
+    "test_coverage_min": 80,
+    "test_framework": "vitest",
+    "code_style": "es-modules"
+  }
+}
