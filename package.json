@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "auth:migrate": "node scripts/better-auth-migrate.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "axios": "^1.13.4",
+    "better-auth": "^1.6.4",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",

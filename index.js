@@ -1,5 +1,7 @@
 import express, { urlencoded, json } from "express";
 import { initDB, closeDB } from "./config/connect.js";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./config/auth.js";
 import scoresRouter from "./routes/scores.routes.js";
 import "dotenv/config";
 
@@ -13,6 +15,8 @@ const startServer = async () => {
 
     app.use(json());
     app.use(urlencoded({ extended: true }));
+
+    app.all("/api/auth/*", toNodeHandler(auth));
 
     app.use("/api/scores", scoresRouter); // changed this from /users
 

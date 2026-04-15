@@ -1,12 +1,16 @@
 import { Router } from "express";
 import multer from "multer";
 import * as ScoresController from "../controllers/scores.controllers.js";
-import { authenticateApiSecret } from "../middlewares/auth.middleware.js";
+import {
+  validateApiKey,
+  validateSession,
+} from "../middlewares/auth.middleware.js";
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.use(authenticateApiSecret);
+router.use(validateApiKey);
+router.use(validateSession);
 
 router.delete("/:id", ScoresController.deleteScore);
 router.put("/:id", ScoresController.updateScore);

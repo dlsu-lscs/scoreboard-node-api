@@ -1,19 +1,44 @@
 import "dotenv/config";
+import { fromNodeHeaders } from "better-auth/node";
+import { auth } from "../config/auth.js";
 
-export function authenticateApiSecret(req, res, next) {
-  const auth_header = req.headers["authorization"];
+export function validateApiKey(req, res, next) {
+  const apiKey = req.headers["x-api-key"];
 
-  // checks if authorization header exists and with correct formatting
-  if (!auth_header || !auth_header.startsWith("Bearer "))
+  if (!apiKey) {
     return res
       .status(401)
-      .json({ message: "Unauthorized: No token provided." });
+      .json({ message: "Unauthorized: No API key provided." });
+  }
 
-  const token = auth_header.split(" ")[1];
+  if (apiKey !== process.env.API_SECRET) {
+    return res.status(401).json({ message: "Unauthorized: Invalid API key." });
+  }
 
-  // checks if API token is the same with ours
-  if (token !== process.env.API_SECRET)
-    return res.status(403).json({ error: "Invalid API token" });
-
-  next();
+  return next();
 }
+
+export async function validateSession(req, res, next) {
+  try {
+    const session = await auth.api.getSession({
+      headers: fromNodeHeaders(req.headers),
+    });
+
+    if (!session) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: Invalid or expired session." });
+    }
+
+    req.user = session.user;
+    req.session = session.session;
+    return next();
+  } catch (error) {
+    console.error("Session validation error:", error);
+    return res
+      .status(401)
+      .json({ message: "Unauthorized: Session validation failed." });
+  }
+}
+
+export { validateApiKey as authenticateApiSecret };
