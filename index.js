@@ -13,10 +13,10 @@ const startServer = async () => {
 
     console.log("Databases initialized.");
 
+    app.use("/api/auth", toNodeHandler(auth));
+
     app.use(json());
     app.use(urlencoded({ extended: true }));
-
-    app.use("/api/auth", toNodeHandler(auth));
 
     app.use("/api/scores", scoresRouter); // changed this from /users
 
