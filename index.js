@@ -16,7 +16,7 @@ const startServer = async () => {
     app.use(json());
     app.use(urlencoded({ extended: true }));
 
-    app.all("/api/auth/*", toNodeHandler(auth));
+    app.use("/api/auth", toNodeHandler(auth));
 
     app.use("/api/scores", scoresRouter); // changed this from /users
 
