@@ -13,7 +13,7 @@ const startServer = async () => {
 
     console.log("Databases initialized.");
 
-    app.use("/api/auth", toNodeHandler(auth));
+    app.all("/api/auth/*splat", toNodeHandler(auth));
 
     app.use(json());
     app.use(urlencoded({ extended: true }));
