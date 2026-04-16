@@ -13,6 +13,14 @@ const startServer = async () => {
 
     console.log("Databases initialized.");
 
+    // Login URL endpoint - must be before better-auth mount
+    app.get("/api/auth/login-url", (req, res) => {
+      const baseUrl = process.env.BETTER_AUTH_URL || process.env.APP_URL || 'http://localhost:3000';
+      const callbackUrl = encodeURIComponent(baseUrl + '/');
+      const loginUrl = `${baseUrl}/api/auth/sign-in/social?provider=google&callbackURL=${callbackUrl}`;
+      res.json({ loginUrl });
+    });
+
     app.all("/api/auth/*splat", toNodeHandler(auth));
 
     app.use(json());
