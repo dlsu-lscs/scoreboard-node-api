@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { getMigrations } from "better-auth/db";
+import { getMigrations } from "better-auth/db/migration";
 import { auth } from "../config/auth.js";
 
 const run = async () => {
