@@ -1,6 +1,6 @@
 # Roadmap: LSCS Scoreboard API v1
 
-**Created:** 2025-04-15  
+**Created:** 2002-04-15  
 **Phases:** 2  
 **Requirements:** 8 v1 requirements
 
@@ -11,7 +11,6 @@
 | # | Phase | Goal | Requirements | Success Criteria |
 |---|-------|------|--------------|------------------|
 | 1 | **Add Google OAuth** | Implement secure authentication | AUTH-01 to AUTH-04 | 4 |
-| 2 | **Stabilize & Test** | Fix bugs and add test coverage | BUG-01, BUG-02, TEST-01, TEST-02 | 4 |
 
 ---
 
@@ -51,55 +50,3 @@
 - [ ] **01-05: AUTH-03 redirect support** — Add `/api/auth/redirect` endpoint and logout cookie helper
 
 ---
-
-## Phase 2: Stabilize & Test
-
-**Goal:** Fix existing bugs and establish comprehensive test coverage
-
-### Requirements
-- BUG-01: Fix getTop10 returning all scores
-- BUG-02: Fix missing semicolon in getTop10 service
-- TEST-01: Set up Vitest testing framework
-- TEST-02: Achieve 80%+ test coverage
-
-### Success Criteria
-1. `/api/scores/top` returns exactly 10 highest scores
-2. All service functions have proper syntax (no missing semicolons)
-3. `npm test` runs Vitest with configured coverage
-4. Coverage report shows ≥80% across all files
-
-### Key Decisions
-- Test services first (pure logic, easier to test)
-- Mock database connections for unit tests
-- Integration tests for OAuth flow
-
----
-
-## Execution Order
-
-```
-Phase 1: Add Google OAuth
-├── Plan: Discuss OAuth approach and better-auth setup
-├── Execute: Implement authentication layer
-└── Verify: Manual testing of OAuth flow
-
-Phase 2: Stabilize & Test
-├── Plan: Identify bug fixes and test strategy
-├── Execute: Fix bugs, write tests
-└── Verify: Coverage report ≥80%
-```
-
----
-
-## Completion Criteria
-
-**v1 is complete when:**
-- [ ] All 8 v1 requirements marked complete in REQUIREMENTS.md
-- [ ] Google OAuth working in production
-- [ ] Bug fixes deployed and verified
-- [ ] Test coverage ≥80% with all tests passing
-- [ ] No critical security vulnerabilities
-
----
-
-*Roadmap created: 2025-04-15*

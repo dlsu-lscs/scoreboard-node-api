@@ -4,7 +4,58 @@
   "granularity": "standard",
   "parallelization": true,
   "commit_docs": true,
-  "model_profile": "balanced",
+  "model_profile": "inherit",
+  "resolve_model_ids": "omit",
+  "model_overrides": {
+    "gsd-planner": {
+      "model": "nvidia/nvidia/nemotron-3-super-120b-a12b",
+      "temperature": 0.2
+    },
+    "gsd-roadmapper": {
+      "model": "nvidia/nvidia/nemotron-3-super-120b-a12b",
+      "temperature": 0.2
+    },
+    "gsd-executor": {
+      "model": "opencode/minimax-m2.5-free",
+      "temperature": 0.1
+    },
+    "gsd-phase-researcher": {
+      "model": "nvidia/deepseek-ai/deepseek-v3.1",
+      "temperature": 0.3
+    },
+    "gsd-project-researcher": {
+      "model": "nvidia/meta/llama-3.3-70b-instruct",
+      "temperature": 0.3
+    },
+    "gsd-research-synthesizer": {
+      "model": "nvidia/meta/llama-3.3-70b-instruct",
+      "temperature": 0.3
+    },
+    "gsd-debugger": {
+      "model": "nvidia/moonshotai/kimi-k2.5",
+      "temperature": 0.2
+    },
+    "gsd-codebase-mapper": {
+      "model": "nvidia/meta/llama-3.3-70b-instruct",
+      "temperature": 0.2
+    },
+    "gsd-verifier": {
+      "model": "nvidia/meta/llama-3.2-1b-instruct",
+      "temperature": 0.1
+    },
+    "gsd-plan-checker": {
+      "model": "nvidia/meta/llama-3.2-1b-instruct",
+      "temperature": 0.1
+    },
+    "gsd-integration-checker": {
+      "model": "nvidia/meta/llama-3.3-70b-instruct",
+      "temperature": 0.2
+    },
+    "gsd-nyquist-auditor": {
+      "model": "nvidia/meta/llama-3.3-70b-instruct",
+      "temperature": 0.2
+    }
+  },
   "project": {
     "name": "LSCS Scoreboard API",
     "type": "brownfield",
