@@ -3,27 +3,27 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: LSCS Core API Integration
 current_phase: null
-status: defining
-last_updated: "2026-04-17T10:30:00.000Z"
+status: roadmap_created
+last_updated: "2026-04-17T00:00:00.000Z"
 progress:
-  total_phases: 0
-  completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
-  percent: 0
+  total_phases: 4
+  completed_phases: 1
+  total_plans: 5
+  completed_plans: 5
+  percent: 25
 ---
 
 # Project State: LSCS Scoreboard API
 
-**Last Updated:** 2026-04-17
-**Current Milestone:** v1.1 — LSCS Core API Integration
-**Status:** Defining requirements
+**Last Updated:** 2026-04-17  
+**Current Milestone:** v1.1 — LSCS Core API Integration  
+**Status:** Roadmap created, awaiting Phase 2 planning
 
 ---
 
 ## Project Reference
 
-See: `.planning/PROJECT.md` (updated 2026-04-17)
+See: `.planning/PROJECT.md`
 
 **Core value:** Authenticated members can view and manage scores securely
 **Current focus:** Milestone v1.1 — LSCS Core API membership validation
@@ -32,26 +32,23 @@ See: `.planning/PROJECT.md` (updated 2026-04-17)
 
 ## Phase Progress
 
-Previous Milestone (v1.0):
 | Phase | Status | Plans | Progress |
 |-------|--------|-------|----------|
 | 1 — Add Google OAuth | ✓ Complete | 5/5 | 100% |
+| 2 — LSCS Core API Infrastructure | Not started | 0/0 | 0% |
+| 3 — Membership Validation Logic | Not started | 0/0 | 0% |
+| 4 — Protected Routes Integration | Not started | 0/0 | 0% |
 
-Current Milestone (v1.1):
-| Phase | Status | Plans | Progress |
-|-------|--------|-------|----------|
-| — | Not started | — | — |
+**Overall Progress:** 1/4 phases complete (25%)
 
 ---
 
 ## Current Position
 
-Milestone v1.0 (Google OAuth) is complete. Starting v1.1 to add LSCS Core API membership validation.
-
-**Phase:** Not started (defining requirements)
-**Plan:** —
-**Status:** Defining requirements
-**Last activity:** 2026-04-17 — Milestone v1.1 initialized
+**Phase:** 1 (completed) → Starting Phase 2  
+**Plan:** None active  
+**Status:** Roadmap created, awaiting Phase 2 planning  
+**Last activity:** 2026-04-17 — Roadmap created for v1.1
 
 ---
 
@@ -62,6 +59,27 @@ From v1.0:
 - Session management via HTTP-only cookies
 - Protected endpoints with dual-token middleware (API key + session)
 - Schema migration command: `npm run auth:migrate`
+
+For v1.1:
+- LSCS Core API endpoint: `/check-email` (github.com/dlsu-lscs/lscs-core)
+- API key already in `.env` for use
+- Error UX: Redirect to login with toast "Not a member of LSCS"
+- Strict mode: Block login when API is down
+
+---
+
+## Active Requirements
+
+| Requirement | Phase | Description | Status |
+|-------------|-------|-------------|--------|
+| MEMBER-01 | Phase 2 | Post-OAuth membership check via /check-email | Pending |
+| MEMBER-02 | Phase 3 | Non-member access denial with toast message | Pending |
+| MEMBER-03 | Phase 3 | API failure handling (strict mode) | Pending |
+| MEMBER-04 | Phase 4 | Membership check on protected routes | Pending |
+| TECH-01 | Phase 2 | LSCS Core API client module | Pending |
+| TECH-02 | Phase 2 | Integration with better-auth | Pending |
+
+**Coverage:** 6/6 requirements mapped ✓
 
 ---
 
@@ -88,18 +106,9 @@ None currently.
 
 ## Next Actions
 
-1. Define v1.1 requirements in REQUIREMENTS.md
-2. Create roadmap with phases for LSCS Core API integration
-3. Begin Phase 2 (Research/Discussion) — continues from Phase 1 completion
-
----
-
-## Notes
-
-- LSCS Core API endpoint: `/check-email` (documentation: github.com/dlsu-lscs/lscs-core)
-- API key already in `.env` for use
-- Error UX: Redirect to login with toast "Not a member of LSCS"
-- Session refresh: Trust better-auth defaults
+1. Begin Phase 2 planning: `/gsd-plan-phase 2`
+2. Research LSCS Core API `/check-email` endpoint format
+3. Identify better-auth hook points for membership validation
 
 ---
 
