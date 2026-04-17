@@ -1,16 +1,19 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.1
-milestone_name: LSCS Core API Integration
-current_phase: null
-status: roadmap_created
-last_updated: "2026-04-17T00:00:00.000Z"
+milestone_name: Requirements Mapped
+status: in-progress
+current_phase: 2
+current_plan: 1
+total_plans_in_phase: 2
+last_updated: "2026-04-17T15:00:00.000Z"
+last_activity: 2026-04-17 — Completed 02-01: LSCS Core API client
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 5
-  completed_plans: 5
-  percent: 25
+  total_plans: 7
+  completed_plans: 6
+  percent: 86
 ---
 
 # Project State: LSCS Scoreboard API
@@ -35,32 +38,34 @@ See: `.planning/PROJECT.md`
 | Phase | Status | Plans | Progress |
 |-------|--------|-------|----------|
 | 1 — Add Google OAuth | ✓ Complete | 5/5 | 100% |
-| 2 — LSCS Core API Infrastructure | Not started | 0/0 | 0% |
+| 2 — LSCS Core API Infrastructure | In Progress | 1/2 | 50% |
 | 3 — Membership Validation Logic | Not started | 0/0 | 0% |
 | 4 — Protected Routes Integration | Not started | 0/0 | 0% |
 
-**Overall Progress:** 1/4 phases complete (25%)
+**Overall Progress:** 6/7 plans complete (86%)
 
 ---
 
 ## Current Position
 
-**Phase:** 1 (completed) → Starting Phase 2  
-**Plan:** None active  
-**Status:** Roadmap created, awaiting Phase 2 planning  
-**Last activity:** 2026-04-17 — Roadmap created for v1.1
+**Phase:** 2 — LSCS Core API Infrastructure (in progress)  
+**Plan:** 02-01: LSCS Core API client (completed) → Next: 02-02  
+**Status:** Executing Phase 2 plan 01  
+**Last activity:** 2026-04-17 — Completed 02-01: LSCS Core API client
 
 ---
 
 ## Accumulated Context
 
 From v1.0:
+
 - Google OAuth working with better-auth
 - Session management via HTTP-only cookies
 - Protected endpoints with dual-token middleware (API key + session)
 - Schema migration command: `npm run auth:migrate`
 
 For v1.1:
+
 - LSCS Core API endpoint: `/check-email` (github.com/dlsu-lscs/lscs-core)
 - API key already in `.env` for use
 - Error UX: Redirect to login with toast "Not a member of LSCS"
