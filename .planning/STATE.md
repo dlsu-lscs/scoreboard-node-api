@@ -35,9 +35,8 @@ See: `.planning/PROJECT.md` (updated 2025-04-15)
 | Phase | Status | Plans | Progress |
 |-------|--------|-------|----------|
 | 1 — Add Google OAuth | ✓ Complete | 5/5 | 100% |
-| 2 — Stabilize & Test | ○ Planned | 0/0 | 0% |
 
-**Overall:** 4/8 requirements verified complete (50%)
+**Overall:** 4/4 requirements verified complete (100%)
 
 ---
 
@@ -81,15 +80,13 @@ None currently.
 
 1. `/gsd-verify-phase 1` — Verify auth flow and protected endpoints
 2. Update `REQUIREMENTS.md` AUTH-01..AUTH-04 based on verification results
-3. `/gsd-transition 1 → 2` — Move to Phase 2 after verify pass
+3. `/gsd-complete-milestone` — Complete milestone after verification
 
 ---
 
 ## Notes
 
 - Brownfield project: Existing Express + MySQL codebase
-- 2 bugs identified and scheduled for Phase 2
-- TDD approach: Tests to be written alongside bug fixes
 - Research complete: better-auth integration patterns documented
 - Validation strategy defined: 4 dimensions of verification
 - better-auth schema migration script added: `npm run auth:migrate`
