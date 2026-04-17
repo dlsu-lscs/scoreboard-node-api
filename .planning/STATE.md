@@ -1,60 +1,67 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
-milestone_name: milestone
-current_phase: 01
-status: executing
-last_updated: "2026-04-17T07:40:01.537Z"
+milestone: v1.1
+milestone_name: LSCS Core API Integration
+current_phase: null
+status: defining
+last_updated: "2026-04-17T10:30:00.000Z"
 progress:
-  total_phases: 1
-  completed_phases: 1
-  total_plans: 5
-  completed_plans: 5
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State: LSCS Scoreboard API
 
-**Last Updated:** 2026-04-15  
-**Current Phase:** 01
-**Status:** Executing Phase 01
+**Last Updated:** 2026-04-17
+**Current Milestone:** v1.1 — LSCS Core API Integration
+**Status:** Defining requirements
 
 ---
 
 ## Project Reference
 
-See: `.planning/PROJECT.md` (updated 2025-04-15)
+See: `.planning/PROJECT.md` (updated 2026-04-17)
 
-**Core value:** Authenticated members can view and manage scores securely  
-**Current focus:** Phase 01 — add-google-oauth
+**Core value:** Authenticated members can view and manage scores securely
+**Current focus:** Milestone v1.1 — LSCS Core API membership validation
 
 ---
 
 ## Phase Progress
 
+Previous Milestone (v1.0):
 | Phase | Status | Plans | Progress |
 |-------|--------|-------|----------|
 | 1 — Add Google OAuth | ✓ Complete | 5/5 | 100% |
 
-**Overall:** 4/4 requirements verified complete (100%)
+Current Milestone (v1.1):
+| Phase | Status | Plans | Progress |
+|-------|--------|-------|----------|
+| — | Not started | — | — |
 
 ---
 
-## Current Activity
+## Current Position
 
-**Execution Complete (Pending Verify)** — Phase 1 plans executed and summarized:
+Milestone v1.0 (Google OAuth) is complete. Starting v1.1 to add LSCS Core API membership validation.
 
-| Plan | Wave | Requirements | Status |
-|------|------|--------------|--------|
-| Plan 01 | 1 | AUTH-01, AUTH-02 | Complete |
-| Plan 02 | 2 | AUTH-04, D-06, D-07, D-08 | Complete |
-| Plan 03 | 3 | AUTH-01, AUTH-02, AUTH-03 | Complete |
+**Phase:** Not started (defining requirements)
+**Plan:** —
+**Status:** Defining requirements
+**Last activity:** 2026-04-17 — Milestone v1.1 initialized
 
-Execution artifacts:
+---
 
-- `.planning/phases/01-add-google-oauth/01-01-SUMMARY.md`
-- `.planning/phases/01-add-google-oauth/01-02-SUMMARY.md`
-- `.planning/phases/01-add-google-oauth/01-03-SUMMARY.md`
+## Accumulated Context
+
+From v1.0:
+- Google OAuth working with better-auth
+- Session management via HTTP-only cookies
+- Protected endpoints with dual-token middleware (API key + session)
+- Schema migration command: `npm run auth:migrate`
 
 ---
 
@@ -67,6 +74,9 @@ Execution artifacts:
 | 2025-04-15 | Backend-handled OAuth | Phase 1 | better-auth provides complete flow |
 | 2025-04-15 | HTTP-only cookies for sessions | Phase 1 | Override localStorage for better security |
 | 2025-04-15 | All endpoints protected | Phase 1 | No public score endpoints |
+| 2026-04-17 | LSCS Core API for membership validation | v1.1 | Verify organization membership post-OAuth |
+| 2026-04-17 | Strict API failure mode | v1.1 | Block login if membership API is unavailable |
+| 2026-04-17 | Toast + redirect for non-members | v1.1 | Clear UX with redirect to login page |
 
 ---
 
@@ -78,18 +88,18 @@ None currently.
 
 ## Next Actions
 
-1. `/gsd-verify-phase 1` — Verify auth flow and protected endpoints
-2. Update `REQUIREMENTS.md` AUTH-01..AUTH-04 based on verification results
-3. `/gsd-complete-milestone` — Complete milestone after verification
+1. Define v1.1 requirements in REQUIREMENTS.md
+2. Create roadmap with phases for LSCS Core API integration
+3. Begin Phase 2 (Research/Discussion) — continues from Phase 1 completion
 
 ---
 
 ## Notes
 
-- Brownfield project: Existing Express + MySQL codebase
-- Research complete: better-auth integration patterns documented
-- Validation strategy defined: 4 dimensions of verification
-- better-auth schema migration script added: `npm run auth:migrate`
+- LSCS Core API endpoint: `/check-email` (documentation: github.com/dlsu-lscs/lscs-core)
+- API key already in `.env` for use
+- Error UX: Redirect to login with toast "Not a member of LSCS"
+- Session refresh: Trust better-auth defaults
 
 ---
 

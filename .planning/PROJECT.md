@@ -8,33 +8,50 @@ A backend API for managing member scores within the La Salle Computer Society (L
 
 **Authenticated members can view and manage scores securely** — ensuring only verified LSCS members can access the scoreboard while maintaining data integrity.
 
+## Current Milestone: v1.1 LSCS Core API Integration
+
+**Goal:** Extend Google OAuth with LSCS Core API membership validation to ensure only LSCS members can access the scoreboard.
+
+**Target features:**
+- LSCS Core API integration for membership validation
+- Post-OAuth email verification against organization database
+- Clear error handling for non-members (toast + redirect)
+- Strict API failure handling (block login when API is down)
+
+## Previous Milestone: v1.0 Google OAuth
+
+**Completed:** Google OAuth authentication with better-auth
+- ✓ AUTH-01: User can sign in with Google OAuth
+- ✓ AUTH-02: Session persists across browser refresh
+- ✓ AUTH-03: User can log out from any page
+- ✓ AUTH-04: API validates authenticated session on protected endpoints
+
 ## Requirements
 
-### Validated
+### Validated (v1.0)
 
 - ✓ Express.js server with MySQL database
 - ✓ Score CRUD operations (create, read, update, delete)
 - ✓ Bulk score updates via Excel/CSV file upload
 - ✓ API key authentication middleware
 - ✓ MySQL connection pooling with retry logic
+- ✓ AUTH-01: User can sign in with Google OAuth
+- ✓ AUTH-02: Session persists across browser refresh
+- ✓ AUTH-03: User can log out from any page
+- ✓ AUTH-04: API validates authenticated session on protected endpoints
 
-### Active (v1)
+### Active (v1.1)
 
-- [ ] **AUTH-01**: User can sign in with Google OAuth
-- [ ] **AUTH-02**: Session persists across browser refresh
-- [ ] **AUTH-03**: User can log out from any page
-- [ ] **AUTH-04**: API validates authenticated session on protected endpoints
-- [ ] **BUG-01**: Fix getTop10 returning all scores instead of top 10
-- [ ] **BUG-02**: Fix missing semicolon in getTop10 service
-- [ ] **TEST-01**: Set up Vitest testing framework
-- [ ] **TEST-02**: Achieve 80%+ test coverage
+- [ ] **MEMBER-01**: After Google OAuth, validate email via LSCS Core API `/check-email`
+- [ ] **MEMBER-02**: Non-members see "Not a member of LSCS" toast and return to login
+- [ ] **MEMBER-03**: API failures block login (strict mode)
+- [ ] **MEMBER-04**: Membership check runs before any protected endpoint access
 
-### Out of Scope (v1)
+### Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| LSCS Core API validation | Switched to Google OAuth for broader compatibility |
-| Admin roles/permissions | Simple auth sufficient for v1 |
+| Admin roles/permissions | Simple auth sufficient for current use |
 | Email notifications | Not critical for score tracking |
 | Real-time updates | Polling sufficient for current use |
 | Rate limiting | Add when traffic increases |
@@ -60,12 +77,19 @@ A backend API for managing member scores within the La Salle Computer Society (L
 
 ## Key Decisions
 
+### v1.0 (Completed)
+
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Google OAuth over LSCS Core | Broader compatibility, easier member onboarding | — Pending |
-| better-auth library | Modern OAuth handling, session management | — Pending |
-| Include bug fixes in v1 | Stability foundation before adding features | — Pending |
-| Add tests in v1 | TDD approach, prevent regression | — Pending |
+| Google OAuth over LSCS Core | Broader compatibility, easier member onboarding | ✓ Validated — Working with better-auth |
+| better-auth library | Modern OAuth handling, session management | ✓ Validated — Sessions, cookies, logout working |
+
+### v1.1 (In Progress)
+
+| Decision | Rationale | Outcome |
+|----------|-----------|---------|
+| LSCS Core API validation | Organization membership verification after OAuth | — Pending |
+| Strict API failure mode | Security priority — block if membership cannot be verified | — Pending |
 
 ---
 
