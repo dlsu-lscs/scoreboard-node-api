@@ -64,7 +64,11 @@
 4. Membership check runs before session creation in the OAuth flow
 5. Code is testable and follows existing service patterns
 
-**Plans**: TBD
+**Plans:** 2 plans
+
+**Planned:**
+- [ ] 02-01-PLAN.md — Create LSCS Core API client (TECH-01)
+- [ ] 02-02-PLAN.md — Integrate membership validation and verify flow (TECH-02, MEMBER-01)
 
 ---
 
