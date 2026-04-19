@@ -4,6 +4,9 @@ import { initDB, closeDB } from "./config/connect.js";
 import scoresRouter from "./routes/scores.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import "dotenv/config";
+import { webcrypto as crypto } from "node:crypto";
+
+globalThis.crypto = crypto;
 
 const app = express();
 
