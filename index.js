@@ -1,4 +1,5 @@
 import express, { urlencoded, json } from "express";
+import cookieParser from "cookie-parser";
 import { initDB, closeDB } from "./config/connect.js";
 import scoresRouter from "./routes/scores.routes.js";
 import authRouter from "./routes/auth.routes.js";
@@ -11,6 +12,9 @@ const startServer = async () => {
     await initDB();
 
     console.log("Databases initialized.");
+
+    // Cookie parser MUST be before auth routes for OAuth state matching
+    app.use(cookieParser());
 
     app.use(authRouter);
 

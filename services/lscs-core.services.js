@@ -1,9 +1,4 @@
 /**
- * LSCS Core API Client
- * Provides membership validation via external LSCS Core API
- */
-
-/**
  * Normalizes email address by converting to lowercase and trimming whitespace
  * @param {string} email - Raw email input
  * @returns {string} Normalized email
@@ -48,33 +43,58 @@ export async function checkMembershipByEmail(email) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-API-Key": process.env.LSCS_CORE_API_KEY,
+        Authorization: `Bearer ${process.env.LSCS_CORE_API_KEY}`,
+        Accept: "application/json",
       },
       body: JSON.stringify({ email: normalizedEmail }),
       signal: controller.signal,
+      redirect: "follow",
     });
+
+    console.log(response);
 
     clearTimeout(timeoutId);
 
+    // 404 means "not a member" - this is the expected response for non-members
+    if (response.status === 404) {
+      return { isMember: false };
+    }
+
     if (!response.ok) {
       const statusText = response.statusText || "Unknown error";
-      console.warn(`[LSCS Core] API responded with status ${response.status}: ${statusText}`);
-      throw new Error("LSCS Core API failed to respond. Please try again later.");
+      console.warn(
+        `[LSCS Core] API responded with status ${response.status}: ${statusText}`,
+      );
+      throw new Error(
+        "LSCS Core API failed to respond. Please try again later.",
+      );
     }
 
     const data = await response.json();
 
-    if (typeof data?.isMember !== "boolean") {
+    if (typeof data?.state !== "string") {
       console.warn("[LSCS Core] Invalid response format:", data);
-      throw new Error("LSCS Core API failed to respond. Please try again later.");
+      throw new Error(
+        "LSCS Core API failed to respond. Please try again later.",
+      );
+    }
+
+    let state;
+
+    if (data.state === "present") {
+      state = true;
+    } else {
+      state = false;
     }
 
     const duration = Date.now() - startTime;
     if (duration > 500) {
-      console.debug(`[LSCS Core] Request completed in ${duration}ms, isMember: ${data.isMember}`);
+      console.debug(
+        `[LSCS Core] Request completed in ${duration}ms, isMember: ${data.isMember}`,
+      );
     }
 
-    return { isMember: data.isMember };
+    return { isMember: state };
   } catch (error) {
     clearTimeout(timeoutId);
 
