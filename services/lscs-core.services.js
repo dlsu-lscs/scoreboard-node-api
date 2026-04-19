@@ -51,8 +51,6 @@ export async function checkMembershipByEmail(email) {
       redirect: "follow",
     });
 
-    console.log(response);
-
     clearTimeout(timeoutId);
 
     // 404 means "not a member" - this is the expected response for non-members

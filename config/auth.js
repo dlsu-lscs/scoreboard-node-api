@@ -77,7 +77,6 @@ export const auth = betterAuth({
               });
             }
             const { isMember } = await checkMembershipByEmail(user.email);
-            console.log("isMember: " + isMember);
             if (!isMember) {
               throw new APIError("UNAUTHORIZED", {
                 message: "LSCS-CORE-NOT-MEMBER",
@@ -94,7 +93,6 @@ export const auth = betterAuth({
             });
           }
         },
-
       },
     },
   },
