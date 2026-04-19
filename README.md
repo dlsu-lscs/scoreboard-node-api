@@ -127,11 +127,12 @@ File format: Excel or CSV with member_id in the 3rd column.
 
 ## Authentication Flow
 
-1. User clicks login → Frontend requests `/api/auth/login`
-2. Backend redirects to Google OAuth
-3. Google returns user to callback → better-auth creates session
-4. Before user creation → LSCS Core API verifies membership
-5. Frontend receives session cookie → Can access score routes
+1. User clicks login → Frontend requests a login url via `/api/auth/login-url`
+2. The API responds with a login URL with endpoint `/api/auth/login?provider=google`
+3. The frontend uses the provided login URL to redirect the user to Google OAuth
+5. Google returns user to callback → better-auth creates session
+6. Before user creation → LSCS Core API verifies membership
+7. Frontend receives session cookie → Can access score routes
 
 ## Scripts
 
