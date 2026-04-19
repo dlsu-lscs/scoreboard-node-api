@@ -15,7 +15,7 @@ export async function getLoginPage(req, res) {
     const callbackURL = req.query.callbackURL || "http://localhost:3000/";
     const html = await AuthService.buildLoginPage({ provider, callbackURL });
     res.setHeader("Content-Type", "text/html");
-    res.send(html);
+    res.status(200).send(html);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

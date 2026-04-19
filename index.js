@@ -21,7 +21,8 @@ const startServer = async () => {
     app.use(json());
     app.use(urlencoded({ extended: true }));
 
-    app.use("/api/scores", scoresRouter); // changed this from /users
+    // Services routes
+    app.use("/api/scores", scoresRouter);
 
     app.get("/", (req, res) => {
       res.status(200).json({
