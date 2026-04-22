@@ -3,6 +3,9 @@ import mysql from "mysql2/promise";
 import { betterAuth, APIError } from "better-auth";
 import { checkMembershipByEmail } from "../services/lscs-core.services.js";
 
+// Define the frontend URL once to reuse for CORS and Error Redirects
+const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+
 export const authDatabase = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -14,14 +17,17 @@ export const authDatabase = mysql.createPool({
 export const auth = betterAuth({
   database: authDatabase,
   secret: process.env.BETTER_AUTH_SECRET,
+
   baseURL:
     process.env.BETTER_AUTH_URL ||
     process.env.BETTER_AUTH_BASE_URL ||
-    "http://localhost:3000",
+    "http://localhost:8000",
+
   trustedOrigins: [
     process.env.BETTER_AUTH_URL,
-    process.env.WEB_ORIGIN ?? "http://localhost:3000",
-  ],
+    frontendUrl, // Uses the variable defined above
+  ].filter(Boolean), // Added .filter(Boolean) to remove undefined values safely
+
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -33,6 +39,7 @@ export const auth = betterAuth({
   },
   advanced: {
     useSecureCookies: process.env.NODE_ENV === "production",
+    crossSubDomainCookies: true, // FIX #3: Helps ensure cookie delivery across your split domains
     defaultCookieAttributes: {
       httpOnly: true,
       sameSite: "lax",
@@ -52,11 +59,9 @@ export const auth = betterAuth({
               });
             }
           } catch (error) {
-            // If it's already our APIError, re-throw it
             if (error instanceof APIError) {
               throw error;
             }
-            // Otherwise it's an API failure
             throw new APIError("INTERNAL_SERVER_ERROR", {
               message: "LSCS-CORE-API-FAILURE",
             });
@@ -83,11 +88,9 @@ export const auth = betterAuth({
               });
             }
           } catch (error) {
-            // If it's already our APIError, re-throw it
             if (error instanceof APIError) {
               throw error;
             }
-            // Otherwise it's an API failure
             throw new APIError("INTERNAL_SERVER_ERROR", {
               message: "LSCS-CORE-API-FAILURE",
             });
@@ -96,14 +99,16 @@ export const auth = betterAuth({
       },
     },
   },
+
+  // FIX #1: Use absolute URLs pointing to the frontend
   onAPIError: {
-    errorURL: "/login",
+    errorURL: `${frontendUrl}/login`,
     onError: (error, ctx) => {
       if (error.message === "LSCS-CORE-NOT-MEMBER") {
-        return "/login?error=not_member";
+        return `${frontendUrl}/login?error=not_member`;
       }
       if (error.message === "LSCS-CORE-API-FAILURE") {
-        return "/login?error=api_unavailable";
+        return `${frontendUrl}/login?error=api_unavailable`;
       }
       return undefined;
     },
