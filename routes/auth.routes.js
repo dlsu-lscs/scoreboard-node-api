@@ -7,9 +7,7 @@ import * as AuthController from "../controllers/auth.controller.js";
 
 const router = Router();
 
-router.use(validateApiKey);
-
-router.get("/api/auth/login-url", AuthController.getLoginUrl);
+router.get("/api/auth/login-url", validateApiKey, AuthController.getLoginUrl);
 
 router.get("/api/auth/login", AuthController.getLoginPage);
 router.all("/api/auth/*splat", toNodeHandler(auth));
