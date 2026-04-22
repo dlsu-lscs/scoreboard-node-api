@@ -39,7 +39,7 @@ export const auth = betterAuth({
   },
   advanced: {
     useSecureCookies: process.env.NODE_ENV === "production",
-    crossSubDomainCookies: true, // FIX #3: Helps ensure cookie delivery across your split domains
+    crossSubDomainCookies: process.env.NODE_ENV === "production",
     defaultCookieAttributes: {
       httpOnly: true,
       sameSite: "lax",
