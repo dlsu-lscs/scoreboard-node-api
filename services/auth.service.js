@@ -12,7 +12,8 @@ export async function buildLoginUrl() {
     process.env.BETTER_AUTH_URL ||
     process.env.APP_URL ||
     "http://localhost:3000";
-  const callbackUrl = encodeURIComponent(baseUrl + "/");
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+  const callbackUrl = encodeURIComponent(frontendUrl + "/");
   return `${baseUrl}/api/auth/login?provider=google&callbackURL=${callbackUrl}`;
 }
 
