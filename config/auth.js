@@ -26,6 +26,7 @@ export const auth = betterAuth({
   trustedOrigins: [
     process.env.BETTER_AUTH_URL,
     frontendUrl, // Uses the variable defined above
+    "https://localhost:3000",
   ].filter(Boolean), // Added .filter(Boolean) to remove undefined values safely
 
   socialProviders: {
