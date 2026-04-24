@@ -5,6 +5,8 @@ import scoresRouter from "./routes/scores.routes.js";
 import authRouter from "./routes/auth.routes.js";
 import "dotenv/config";
 import { webcrypto as crypto } from "node:crypto";
+import { corsOptions } from "./config/cors.js";
+import cors from "cors";
 
 globalThis.crypto = crypto;
 
@@ -15,6 +17,7 @@ const startServer = async () => {
     await initDB();
 
     console.log("Databases initialized.");
+    app.use(cors(corsOptions));
 
     // Cookie parser MUST be before auth routes for OAuth state matching
     app.use(cookieParser());
