@@ -28,12 +28,11 @@ export async function bulkTallyScores(scoreData) {
   }
 
   const query = `
-    INSERT INTO scores (member_id, score, first_name, last_name) 
+    INSERT INTO scores (member_id, score, name) 
     VALUES ? 
     ON DUPLICATE KEY UPDATE 
       score = scores.score + VALUES(score),
-      first_name = VALUES(first_name),
-      last_name = VALUES(last_name)
+      name = VALUES(name)
   `;
 
   try {

@@ -1,21 +1,6 @@
 import * as ScoresService from "../services/scores.services.js";
 import * as XLSX from "xlsx";
-
-function parseName(name) {
-  if (!name) return { firstName: "", lastName: "" };
-  const trimmed = String(name).trim();
-  if (!trimmed) return { firstName: "", lastName: "" };
-  if (trimmed.includes(", ")) {
-    const parts = trimmed.split(", ");
-    return { firstName: parts[1]?.trim() || "", lastName: parts[0]?.trim() || "" };
-  }
-  const lastSpace = trimmed.lastIndexOf(" ");
-  if (lastSpace === -1) return { firstName: trimmed, lastName: "" };
-  return {
-    firstName: trimmed.substring(0, lastSpace).trim(),
-    lastName: trimmed.substring(lastSpace + 1).trim(),
-  };
-}
+import { parse } from 'csv-parse/sync';
 
 export async function getScores(req, res) {
   try {
@@ -77,34 +62,32 @@ export async function uploadScoreFile(req, res) {
 
         const rawId = row[2];
         const rawName = row[3];
-        const { firstName, lastName } = parseName(rawName);
 
         if (rawId) {
           const memberId = String(rawId).replace(/['"]+/g, "").trim();
 
           if (/^\d+$/.test(memberId)) {
-            entriesToProcess.push([parseInt(memberId), pointsToAdd, firstName, lastName]);
+            entriesToProcess.push([parseInt(memberId), pointsToAdd, String(rawName || "").trim()]);
           }
         }
       }
     } else {
       const fileContent = req.file.buffer.toString("utf-8");
-      const lines = fileContent.split(/\r?\n/);
+      const records = parse(fileContent, {
+        skip_empty_lines: true,
+        trim: true,
+      });
 
-      for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (!line) continue;
-
-        const columns = line.split(",");
-        const rawId = columns[2];
-        const rawName = columns[3];
-        const { firstName, lastName } = parseName(rawName);
+      for (let i = 1; i < records.length; i++) {
+        const row = records[i];
+        const rawId = row[2];
+        const rawName = row[3];
 
         if (rawId) {
-          const memberId = rawId.replace(/['"]+/g, "").trim();
+          const memberId = String(rawId).replace(/['"]+/g, "").trim();
 
           if (/^\d+$/.test(memberId)) {
-            entriesToProcess.push([parseInt(memberId), pointsToAdd, firstName, lastName]);
+            entriesToProcess.push([parseInt(memberId), pointsToAdd, rawName || ""]);
           }
         }
       }
