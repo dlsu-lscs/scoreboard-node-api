@@ -40,7 +40,10 @@ export const auth = betterAuth({
   },
   advanced: {
     useSecureCookies: process.env.NODE_ENV === "production",
-    crossSubDomainCookies: process.env.NODE_ENV === "production",
+    crossSubDomainCookies:
+      process.env.NODE_ENV === "production"
+        ? { enabled: true, domain: ".dlsu-lscs.org" }
+        : false,
     defaultCookieAttributes: {
       httpOnly: true,
       sameSite: "none",
@@ -101,10 +104,15 @@ export const auth = betterAuth({
     },
   },
 
-  // FIX #1: Use absolute URLs pointing to the frontend
   onAPIError: {
-    errorURL: `${frontendUrl}/login`,
+    errorURL: `${frontendUrl}/login?error=unknown`,
     onError: (error, ctx) => {
+      console.error("[auth:onAPIError]", {
+        message: error.message,
+        status: error.status,
+        path: ctx?.path,
+        method: ctx?.method,
+      });
       if (error.message === "LSCS-CORE-NOT-MEMBER") {
         return `${frontendUrl}/login?error=not_member`;
       }
