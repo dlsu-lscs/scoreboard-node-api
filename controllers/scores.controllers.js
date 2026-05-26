@@ -1,6 +1,22 @@
 import * as ScoresService from "../services/scores.services.js";
 import * as XLSX from "xlsx";
 
+function parseName(name) {
+  if (!name) return { firstName: "", lastName: "" };
+  const trimmed = String(name).trim();
+  if (!trimmed) return { firstName: "", lastName: "" };
+  if (trimmed.includes(", ")) {
+    const parts = trimmed.split(", ");
+    return { firstName: parts[1]?.trim() || "", lastName: parts[0]?.trim() || "" };
+  }
+  const lastSpace = trimmed.lastIndexOf(" ");
+  if (lastSpace === -1) return { firstName: trimmed, lastName: "" };
+  return {
+    firstName: trimmed.substring(0, lastSpace).trim(),
+    lastName: trimmed.substring(lastSpace + 1).trim(),
+  };
+}
+
 export async function getScores(req, res) {
   try {
     const scores = await ScoresService.getScores();
@@ -60,12 +76,14 @@ export async function uploadScoreFile(req, res) {
         if (!row || row.length === 0) continue;
 
         const rawId = row[2];
+        const rawName = row[3];
+        const { firstName, lastName } = parseName(rawName);
 
         if (rawId) {
           const memberId = String(rawId).replace(/['"]+/g, "").trim();
 
           if (/^\d+$/.test(memberId)) {
-            entriesToProcess.push([parseInt(memberId), pointsToAdd]);
+            entriesToProcess.push([parseInt(memberId), pointsToAdd, firstName, lastName]);
           }
         }
       }
@@ -79,12 +97,14 @@ export async function uploadScoreFile(req, res) {
 
         const columns = line.split(",");
         const rawId = columns[2];
+        const rawName = columns[3];
+        const { firstName, lastName } = parseName(rawName);
 
         if (rawId) {
           const memberId = rawId.replace(/['"]+/g, "").trim();
 
           if (/^\d+$/.test(memberId)) {
-            entriesToProcess.push([parseInt(memberId), pointsToAdd]);
+            entriesToProcess.push([parseInt(memberId), pointsToAdd, firstName, lastName]);
           }
         }
       }
