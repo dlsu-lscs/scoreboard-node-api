@@ -38,6 +38,14 @@ export const auth = betterAuth({
   session: {
     expiresIn: 60 * 60 * 24 * 7,
   },
+  user: {
+    additionalFields: {
+      idNumber: {
+        type: "string",
+        required: false,
+      },
+    },
+  },
   advanced: {
     useSecureCookies: process.env.NODE_ENV === "production",
     crossSubDomainCookies:
@@ -56,11 +64,14 @@ export const auth = betterAuth({
       create: {
         before: async (user) => {
           try {
-            const { isMember } = await checkMembershipByEmail(user.email);
+            const { isMember, idNumber } = await checkMembershipByEmail(user.email);
             if (!isMember) {
               throw new APIError("UNAUTHORIZED", {
                 message: "LSCS-CORE-NOT-MEMBER",
               });
+            }
+            if (idNumber) {
+              return { data: { idNumber } };
             }
           } catch (error) {
             if (error instanceof APIError) {
@@ -85,11 +96,14 @@ export const auth = betterAuth({
                 message: "LSCS-CORE-NOT-MEMBER",
               });
             }
-            const { isMember } = await checkMembershipByEmail(user.email);
+            const { isMember, idNumber } = await checkMembershipByEmail(user.email);
             if (!isMember) {
               throw new APIError("UNAUTHORIZED", {
                 message: "LSCS-CORE-NOT-MEMBER",
               });
+            }
+            if (idNumber && !user.idNumber) {
+              await context.context.internalAdapter.updateUser(session.userId, { idNumber });
             }
           } catch (error) {
             if (error instanceof APIError) {

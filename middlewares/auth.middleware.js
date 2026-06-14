@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { fromNodeHeaders } from "better-auth/node";
 import { auth } from "../config/auth.js";
+import { getScoreByMemberId } from "../services/scores.services.js";
 
 export function validateApiKey(req, res, next) {
   const apiKey = req.headers["x-api-key"];
@@ -32,6 +33,19 @@ export async function validateSession(req, res, next) {
 
     req.user = session.user;
     req.session = session.session;
+
+    if (req.user.idNumber) {
+      try {
+        const scoreRecord = await getScoreByMemberId(req.user.idNumber);
+        req.user.score = scoreRecord ? scoreRecord.score : 0;
+      } catch (error) {
+        console.error("[validateSession] Failed to fetch score:", error);
+        req.user.score = 0;
+      }
+    } else {
+      req.user.score = 0;
+    }
+
     return next();
   } catch (error) {
     console.error("Session validation error:", error);

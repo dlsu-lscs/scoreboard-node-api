@@ -10,7 +10,7 @@ function normalizeEmail(email) {
 /**
  * Checks membership status via LSCS Core API
  * @param {string} email - Email address to validate
- * @returns {Promise<{isMember: boolean}>} Membership status
+ * @returns {Promise<{isMember: boolean, idNumber: string | null}>} Membership status and student ID number
  * @throws {Error} When API call fails, times out, or returns invalid response
  */
 export async function checkMembershipByEmail(email) {
@@ -92,7 +92,10 @@ export async function checkMembershipByEmail(email) {
       );
     }
 
-    return { isMember: state };
+    return {
+      isMember: state,
+      idNumber: data.idNumber || null,
+    };
   } catch (error) {
     clearTimeout(timeoutId);
 

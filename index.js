@@ -8,8 +8,6 @@ import { webcrypto as crypto } from "node:crypto";
 import { corsOptions } from "./config/cors.js";
 import cors from "cors";
 
-globalThis.crypto = crypto;
-
 const app = express();
 
 const startServer = async () => {
