@@ -35,6 +35,21 @@ export async function getScoreByMemberId(req, res) {
   }
 }
 
+function detectColumns(headerRow) {
+  let memberIdIdx = 2;
+  let nameIdx = 3;
+
+  if (!headerRow || headerRow.length === 0) return { memberIdIdx, nameIdx };
+
+  for (let i = 0; i < headerRow.length; i++) {
+    const h = String(headerRow[i] || "").toLowerCase().trim();
+    if (/id\s*no/.test(h) || h === "id") memberIdIdx = i;
+    if (/full\s*name/.test(h) || h === "name") nameIdx = i;
+  }
+
+  return { memberIdIdx, nameIdx };
+}
+
 export async function uploadScoreFile(req, res) {
   try {
     if (!req.file || !req.file.buffer) {
@@ -51,17 +66,18 @@ export async function uploadScoreFile(req, res) {
 
     if (isExcel) {
       const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
-      const sheetName = workbook.SheetNames[0]; // Get first sheet
+      const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
 
       const data = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+      const { memberIdIdx, nameIdx } = detectColumns(data[0]);
 
       for (let i = 1; i < data.length; i++) {
         const row = data[i];
         if (!row || row.length === 0) continue;
 
-        const rawId = row[2];
-        const rawName = row[3];
+        const rawId = row[memberIdIdx];
+        const rawName = row[nameIdx];
 
         if (rawId) {
           const memberId = String(rawId).replace(/['"]+/g, "").trim();
@@ -78,10 +94,12 @@ export async function uploadScoreFile(req, res) {
         trim: true,
       });
 
+      const { memberIdIdx, nameIdx } = detectColumns(records[0]);
+
       for (let i = 1; i < records.length; i++) {
         const row = records[i];
-        const rawId = row[2];
-        const rawName = row[3];
+        const rawId = row[memberIdIdx];
+        const rawName = row[nameIdx];
 
         if (rawId) {
           const memberId = String(rawId).replace(/['"]+/g, "").trim();
