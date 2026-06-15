@@ -22,6 +22,13 @@ router.get("/api/auth/get-session", async (req, res) => {
       return res.status(401).json(null);
     }
 
+    console.debug("[get-session] User from DB:", {
+      userId: session.user.id,
+      email: session.user.email,
+      idNumber: session.user.idNumber,
+      idNumberType: typeof session.user.idNumber,
+    });
+
     let score = 0;
     if (session.user.idNumber) {
       const scoreRecord = await getScoreByMemberId(session.user.idNumber);

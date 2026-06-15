@@ -16,12 +16,9 @@ function normalizeEmail(email) {
 export async function checkMembershipByEmail(email) {
   const normalizedEmail = normalizeEmail(email);
 
-  // Validate email input
   if (!normalizedEmail || typeof normalizedEmail !== "string") {
     throw new Error("Invalid email provided");
   }
-
-  const url = `${process.env.LSCS_CORE_URL}/check-email`;
 
   if (!process.env.LSCS_CORE_URL) {
     console.warn("[LSCS Core] Missing LSCS_CORE_URL environment variable");
@@ -32,6 +29,8 @@ export async function checkMembershipByEmail(email) {
     console.warn("[LSCS Core] Missing LSCS_CORE_API_KEY environment variable");
     throw new Error("LSCS Core API failed to respond. Please try again later.");
   }
+
+  const url = `${process.env.LSCS_CORE_URL}/member`;
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 5000);
@@ -53,7 +52,6 @@ export async function checkMembershipByEmail(email) {
 
     clearTimeout(timeoutId);
 
-    // 404 means "not a member" - this is the expected response for non-members
     if (response.status === 404) {
       return { isMember: false };
     }
@@ -70,31 +68,23 @@ export async function checkMembershipByEmail(email) {
 
     const data = await response.json();
 
-    if (typeof data?.state !== "string") {
-      console.warn("[LSCS Core] Invalid response format:", data);
+    if (!data?.id) {
+      console.warn("[LSCS Core] Invalid response format (missing id):", data);
       throw new Error(
         "LSCS Core API failed to respond. Please try again later.",
       );
     }
 
-    let state;
-
-    if (data.state === "present") {
-      state = true;
-    } else {
-      state = false;
-    }
-
     const duration = Date.now() - startTime;
     if (duration > 500) {
       console.debug(
-        `[LSCS Core] Request completed in ${duration}ms, isMember: ${data.isMember}`,
+        `[LSCS Core] Request completed in ${duration}ms`,
       );
     }
 
     return {
-      isMember: state,
-      idNumber: data.idNumber || null,
+      isMember: true,
+      idNumber: String(data.id),
     };
   } catch (error) {
     clearTimeout(timeoutId);
