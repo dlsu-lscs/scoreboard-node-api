@@ -2,7 +2,7 @@ import { getDB } from "../config/connect.js";
 
 export async function getScores() {
   const db = await getDB();
-  const [scores] = await db.query("SELECT * FROM scores");
+  const [scores] = await db.query("SELECT * FROM scores ORDER BY score DESC");
   return scores;
 }
 
